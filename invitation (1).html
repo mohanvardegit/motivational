@@ -1,0 +1,193 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Motivational Invitation for GPJ Engineers</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      text-align: center;
+      overflow: auto;
+    }
+    .container {
+      max-width: 600px;
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+      margin: 20px;
+    }
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      color: #ffd700;
+    }
+    .quote-box {
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid #ffd700;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      font-size: 1.2em;
+      font-style: italic;
+      line-height: 1.5;
+    }
+    .author {
+      font-size: 1em;
+      color: #ccc;
+      margin-top: 10px;
+    }
+    .author-img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 10px;
+      border: 2px solid #ffd700;
+    }
+    audio {
+      margin-top: 20px;
+      width: 100%;
+      max-width: 300px;
+    }
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.8em;
+      }
+      .quote-box {
+        font-size: 1em;
+      }
+      .author-img {
+        width: 60px;
+        height: 60px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Welcome, Esteemed Engineers!</h1>
+    <p>Join us for an inspiring gathering of brilliant minds. Let these quotes fuel your passion for engineering and life!</p>
+    
+    <div class="quote-box">
+      <img src="https://images.unsplash.com/photo-1504257432389-52343af06ae3?ixlib=rb-4.0.3&auto=format&fit=crop&w=80&h=80&q=80" alt="James Kip Finch" class="author-img">
+      "The engineer has been, and is, a maker of history." <br>
+      <span class="author">— James Kip Finch</span>
+    </div>
+    <div class="quote-box">
+      <img src="https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixlib=rb-4.0.3&auto=format&fit=crop&w=80&h=80&q=80" alt="Anonymous" class="author-img">
+      "Age is no barrier when it comes to building the future with experience and wisdom." <br>
+      <span class="author">— Anonymous</span>
+    </div>
+    <div class="quote-box">
+      <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=80&h=80&q=80" alt="Prakhar Srivastav" class="author-img">
+      "Engineering is not only study of 45 subjects but it is moral studies of intellectual life." <br>
+      <span class="author">— VASU</span>
+    </div>
+    <div class="quote-box">
+      <img src="https://drive.google.com/file/d/1DywRV4DaqXz3wBjfQaH4J-UiMt7MJTLD/view?usp=sharing=format&fit=crop&w=80&h=80&q=80" alt="William Osler" class="author-img">
+      "The value of experience is not in seeing much, but in seeing wisely." <br>
+      <span class="author">— William Osler</span>
+    </div>
+    <div class="quote-box">
+      <img src="https://drive.google.com/file/d/1DywRV4DaqXz3wBjfQaH4J-UiMt7MJTLD?ixlib=rb-4.0.3&auto=format&fit=crop&w=80&h=80&q=80" alt="Anonymous (Marathi)" class="author-img">
+      "यशस्वी होण्यासाठी तुम्हाला तुमच्या ध्येयावर विश्वास ठेवावा लागेल." <br>
+      (To succeed, you must believe in your goals.) <br>
+      <span class="author">— Anonymous (Marathi)</span>
+    </div>
+    <div class="quote-box">
+      <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=r" alt="Anonymous (Marathi)" class="author-img">
+      "प्रत्येक यशाची सुरुवात म्हणजे स्वप्न आणि मेहनत." <br>
+      (Every success begins with a dream and hard work.) <br>
+      <span class="author">— Anonymous (Marathi)</span>
+    </div>
+    <div class="quote-box">
+      <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=80&h=80&q=80" alt="Anonymous" class="author-img">
+      "Engineers turn dreams into reality with precision and passion." <br>
+      <span class="author">— Anonymous</span>
+    </div>
+    <div class="quote-box">
+      <img src="https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixlib=rb-4.0.3&auto=format&fit=crop&w=80&h=80&q=80" alt="Anonymous (Marathi)" class="author-img">
+      "ज्ञान आणि अनुभव हे अभियंत्याचे खरे हत्यार आहेत." <br>
+      (Knowledge and experience are the true weapons of an engineer.) <br>
+      <span class="author">— Anonymous (Marathi)</span>
+    </div>
+    <div class="quote-box">
+      <img src="https://images.unsplash.com/photo-1504257432389-52343af06ae3?ixlib=rb-4.0.3&auto=format&fit=crop&w=80&h=80&q=80" alt="Anonymous" class="author-img">
+      "The best engineers build bridges between ideas and reality." <br>
+      <span class="author">— Anonymous</span>
+    </div>
+    <div class="quote-box">
+      <img src="https://images.unsplash.com/photo-1506794778202-6d8d6502ab77?ixlib=rb-4.0.3&auto=format&fit=crop&w=80&h=80&q=80" alt="Anonymous (Marathi)" class="author-img">
+      "आयुष्य एक अभियांत्रिकी प्रकल्प आहे; प्रत्येक पायरी काळजीपूर्वक डिझाइन करा." <br>
+      (Life is an engineering project; design each step carefully.) <br>
+      <span class="author">— Anonymous (Marathi)</span>
+    </div>
+    <div class="quote-box">
+      <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.0.3&auto=format&fit=crop&w=80&h=80&q=80" alt="Anonymous (Marathi)" class="author-img">
+      "जिवनात प्रत्येक संकट हा एक नवीन संधी आहे." <br>
+      (Every challenge in life is a new opportunity.) <br>
+      <span class="author">— Anonymous (Marathi)</span>
+    </div>
+    <div class="quote-box">
+      <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=80&h=80&q=80" alt="Anonymous" class="author-img">
+      "Life’s greatest achievements come from persistent effort and unwavering hope." <br>
+      <span class="author">— Anonymous</span>
+    </div>
+    
+    <audio controls autoplay loop>
+      <source src="https://www.bensound.com/bensound-music/bensound-sunny.mp3" type="audio/mpeg">
+      Your browser does not support the audio element.
+    </audio>
+    <p style="font-size: 0.8em; margin-top: 20px;">Background music: Inspirational track (Note: Replace with "Come September" audio file if available).</p>
+  </div>
+</body>
+</html>
